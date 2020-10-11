@@ -16,6 +16,12 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "repository": {
+    "type": "git",
+    "url": "natanebaltezan"
+  },
+  "author": "natane",
+  "license": "ISC",
   "eslintConfig": {
     "extends": "react-app"
   },
