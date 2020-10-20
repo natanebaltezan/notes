@@ -11,17 +11,24 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      notes:[]
+      notes: []
     };
   };
   createNote(title, text) {
     const newNote = { title, text };
-    const newArrayNotes = [...this.state.notes,newNote]
+    const newArrayNotes = [...this.state.notes, newNote]
     const newState = {
       notes: newArrayNotes
     };
     this.setState(newState);
   };
+
+  deleteNote(index) {
+    console.log('Passou...')
+    let arrayNotes = this.state.notes;
+    arrayNotes.splice(index, 1);
+    this.setState({ notes: arrayNotes })
+  }
 
   /**
    * notes é uma propriedade da Lista de Notas
@@ -31,7 +38,9 @@ class App extends Component {
     return (
       <section className='content'>
         <Form createNote={this.createNote.bind(this)} />
-        <List notes={this.state.notes} />
+        <List
+          deleteNote={this.deleteNote.bind(this)}
+          notes={this.state.notes} />
       </section >
     );
   };
