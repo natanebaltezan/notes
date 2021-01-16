@@ -1,39 +1,47 @@
 import React, { Component } from 'react';
 import './style.css';
 
-/**
- * onChange: chama uma função de handler quando o evento for disparado
- * bind: faz a associação de uma referência da instância, permitindo o uso dos atributos da instância
- * preventDefault: impede o reload da página
- * construtor: inicializa os atributos da classe
- * _ antes da função: convenção que indica método privado
- */
 class Form extends Component {
 
   constructor(props) {
     super(props);
     this.title = '';
-    this.note = '';
+    this.text = '';
+    this.category = 'Sem categoria';
+    this.state = { categories: [] };
+    this._newCategories = this._newCategories.bind(this);
   };
 
+  componentDidMount() {
+    this.props.categories.subscribe(this._newCategories);
+  };
+
+  componentWillUnmount() {
+    this.props.categories.unsubscribe(this._newCategories);
+  };
+
+  _newCategories(categories) {
+    this.setState({ ...this.state, categories });
+  };
+
+  _handleChangeCategory(event) {
+    event.stopPropagation();
+    this.category = event.target.value;
+  }
   _handleChangeTitle(event) {
+    event.stopPropagation();
     this.title = event.target.value;
-    console.log(this.title);
   };
 
-  _handleChangeNote(event) {
-    this.note = event.target.value;
-    console.log(this.note);
+  _handleChangeText(event) {
+    event.stopPropagation();
+    this.text = event.target.value;
   };
 
   _createNote(event) {
     event.preventDefault();
     event.stopPropagation();
-    /**
-     * create note é um método do app.js que está sendo passado como prop
-     * para este componente
-     */
-    this.props.createNote(this.title, this.note);
+    this.props.createNote(this.title, this.text, this.category);
   };
 
   render() {
@@ -41,6 +49,14 @@ class Form extends Component {
       <form className='form'
         onSubmit={this._createNote.bind(this)}
       >
+        <select onChange={this._handleChangeCategory.bind(this)}
+          className='form_input'
+        >
+          <option>Sem categoria</option>
+          {this.state.categories.map((category, index) => {
+            return <option key={index}>{category}</option>
+          })}
+        </select>
         <input
           type='text'
           placeholder='Título'
@@ -51,7 +67,7 @@ class Form extends Component {
           rows={15}
           placeholder='Criar uma nota...'
           className='form_input'
-          onChange={this._handleChangeNote.bind(this)}
+          onChange={this._handleChangeText.bind(this)}
         />
         <button className='form_input form_submit'>
           Criar nota

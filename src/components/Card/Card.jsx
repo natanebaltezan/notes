@@ -11,14 +11,15 @@ class Card extends Component {
   render() {
     return (
       <section className='card'>
+        <DeleteSVG
+          onClick={this.delete.bind(this)}
+          title='icone-deletar' />
         <header className='card_header'>
-          <h3 className='card_title'>{this.props.title}</h3>
-          <DeleteSVG
-            onClick={this.delete.bind(this)} 
-            title='icone-deletar'/>
+          <h4>{this.props.category}</h4>
         </header>
+        <h3 className='card_title'>{this.props.title}</h3>
         <p className='card_text'>{this.props.text}</p>
-      </section>
+      </section >
     );
   };
 };
